@@ -11,7 +11,19 @@ const kcContextExtension: KcContextExtension = {
         ...kcEnvDefaults
     }
 };
-const kcContextExtensionPerPage: KcContextExtensionPerPage = {};
+const kcContextExtensionPerPage: KcContextExtensionPerPage = {
+    "sms-otp.ftl": {
+        otpLogin: {
+            userOtpCredentials: [
+                {
+                    id: "phone",
+                    userLabel: "Phone"
+                }
+            ],
+            selectedCredentialId: "email"
+        }
+    }
+};
 
 export const { getKcContextMock } = createGetKcContextMock({
     kcContextExtension,

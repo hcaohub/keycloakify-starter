@@ -7,6 +7,17 @@ export type KcContextExtension = {
     properties: Record<KcEnvName, string> & {};
 };
 
-export type KcContextExtensionPerPage = {};
+export type KcContextExtensionPerPage = {
+    "sms-otp.ftl": {
+        // Your custom context here
+        otpLogin: {
+            userOtpCredentials: {
+                id: string;
+                userLabel: string;
+            }[];
+            selectedCredentialId?: string;
+        };
+    }
+};
 
 export type KcContext = ExtendKcContext<KcContextExtension, KcContextExtensionPerPage>;

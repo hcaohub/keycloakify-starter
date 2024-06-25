@@ -7,6 +7,7 @@ import Template from "keycloakify/login/Template";
 const UserProfileFormFields = lazy(
     () => import("keycloakify/login/UserProfileFormFields")
 );
+const SmsOtp = lazy(() => import("./pages/SmsOtp"));
 
 const doMakeUserConfirmPassword = true;
 
@@ -19,6 +20,16 @@ export default function KcPage(props: { kcContext: KcContext }) {
         <Suspense>
             {(() => {
                 switch (kcContext.pageId) {
+                    case "sms-otp.ftl":
+                        return (
+                            <SmsOtp
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classes}
+                                Template={Template}
+                                doUseDefaultCss={true}
+                            />
+                        );
                     default:
                         return (
                             <DefaultPage
