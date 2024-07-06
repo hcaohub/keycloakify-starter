@@ -1,0 +1,16 @@
+@import url(./assets/geist/main.css);
+
+body.kcBodyClass {
+    font-family: Geist;
+}
+
+
+.kcHeaderWrapperClass {
+    color: transparent;
+    height: 100px !important;
+    padding: 0px !important;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: visible;
+}

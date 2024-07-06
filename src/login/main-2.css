@@ -1,0 +1,9 @@
+@import url(./main-common.css);
+
+body.kcBodyClass {
+    background: url(./assets/background-2.png) no-repeat center center fixed;
+}
+
+.kcHeaderWrapperClass {
+    background-image: url(./assets/logo-2.png);
+}

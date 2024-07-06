@@ -1,0 +1,13 @@
+@import url(./main-common.css);
+
+body.kcBodyClass {
+    background: url(./assets/background-1.png) no-repeat center center fixed;
+}
+
+.kcHeaderWrapperClass {
+    background-image: url(./assets/logo-1.png);
+}
+
+.kcFormCardClass {
+    border-top-color: black;
+}

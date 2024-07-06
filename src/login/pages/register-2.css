@@ -1,0 +1,6 @@
+@import url(./register-common.css);
+
+.kcFormOptionsWrapperClass a {
+    color: blue !important;
+    font-weight: bold;
+}
