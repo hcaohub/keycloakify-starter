@@ -1,12 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import type { ExtendKcContext } from "keycloakify/account";
-import type { KcEnvName, ThemeName } from "../kc.gen";
+import type { KcContextLike } from "@keycloakify/keycloak-account-ui";
+import type { KcEnvName } from "../kc.gen";
 
-export type KcContextExtension = {
-    themeName: ThemeName;
-    properties: Record<KcEnvName, string> & {};
+export type KcContext = KcContextLike & {
+    themeType: "account";
+    properties: Record<KcEnvName, string>;
 };
-
-export type KcContextExtensionPerPage = {};
-
-export type KcContext = ExtendKcContext<KcContextExtension, KcContextExtensionPerPage>;
