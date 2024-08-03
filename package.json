@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.6",
     "keycloakify": "^10.0.0-rc.125",
     "oidc-spa": "^4.13.1",
     "react": "^18.3.1",

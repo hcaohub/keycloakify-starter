@@ -1,31 +1,32 @@
-import { OidcProvider, useOidc } from "./oidc";
+import { Header } from "./Header";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+  }
+});
 
 export default function App() {
 
   return (
-    <OidcProvider>
+    <ThemeProvider theme={theme}>
+      {/* Provide all your global provider here like redux ect... */}
       <AppContextualized />
-    </OidcProvider>
+    </ThemeProvider>
   );
 
 }
 
+
 function AppContextualized() {
-
-  const { isUserLoggedIn, login, logout, goToAuthServer, oidcTokens } = useOidc();
-
-  if (!isUserLoggedIn) {
-    return <button onClick={() => login({ doesCurrentHrefRequiresAuth: false })}>Login</button>;
-  }
-
   return (
     <>
-      <h1>Welcome {oidcTokens.decodedIdToken.preferred_username}</h1>
-      <button onClick={() => goToAuthServer({ extraQueryParams: { kc_action: "UPDATE_PASSWORD" } })}>Update password</button>
-      <button onClick={() => goToAuthServer({ extraQueryParams: { kc_action: "UPDATE_PROFILE" } })}>Update account infos</button>
-      <button onClick={() => logout({ redirectTo: "home" })}>Update account infos</button>
+      <Header />
+      <main>
+        <h1>Not blocked by authentication initialization</h1>
+      </main>
     </>
   );
 
 }
-
