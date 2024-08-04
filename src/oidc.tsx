@@ -8,7 +8,9 @@ const {
     OidcProvider: OidcProvider_base,
     useOidc,
     getOidc
-} = createReactOidc({
+} = createReactOidc(async () => ({
+    // NOTE: Here I use an async function instead of providing the params directly just to let you know 
+    // that it's okay if you get the oidc params via an API call instead of the environment variables
     isAuthGloballyRequired: true,
     issuerUri: import.meta.env.VITE_OIDC_ISSUER,
     clientId: import.meta.env.VITE_OIDC_CLIENT_ID,
@@ -17,7 +19,7 @@ const {
         sub: z.string(),
         preferred_username: z.string()
     }),
-});
+}));
 
 export { useOidc, getOidc };
 
