@@ -1,0 +1,12 @@
+.login-container {
+    /*width: 300px;*/
+    margin: 100px auto;
+}
+
+.login-button {
+    margin-right: 8px;
+}
+
+.reset-button {
+    margin-left: 8px;
+}

@@ -1,0 +1,49 @@
+= 使用Keycloakify技术，通过React自定义开发keycloak主题
+
+== 搭建开发环境
+
+.Github下载Keycloakify Starter
+https://github.com/hcaohub/keycloakify-starter
+
+.安装组件
+ $ pnpm install
+
+.运行
+ $ npm run dev
+
+.打包
+ $ npm run build-keycloak-theme
+
+打包后复制/dist_keycloak/keycloak-theme-for-kc-22-and-above.jar到keycloak/providers目录下即可
+
+
+== 自定义登录页面操作如下
+
+.使用模版
+执行 npx keycloakify eject-page命令，选择login.ftl自动生成登录页面代码
+
+.修改src/login/KcPage.tsx
+[source,javascript,tabsize=2]
+----
+const Login = lazy(() => import("./pages/Login"));
+
+export default function KcPage(props: { kcContext: KcContext }) {
+    return (
+        <Suspense>
+            {(() => {
+                switch (kcContext.pageId) {
+                    case "login.ftl": return (
+                        <Login
+                            {...{ kcContext, i18n, classes }}
+                            Template={Template}
+                            doUseDefaultCss={true}
+                        />
+                    );
+                    default:
+                        // ....
+                }
+            })()}
+        </Suspense>
+    );
+}
+----
