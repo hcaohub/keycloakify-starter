@@ -32,11 +32,11 @@ if (import.meta.env.DEV) {
                     loginUrl:'http://www.baidu.com',
                     displayName:"gitee"
                 },{
-                    alias:'weixin',
+                    alias:'wechat',
                     loginUrl:'http://www.baidu.com',
                     displayName:"weixin"
                 },{
-                    alias:'workweixin',
+                    alias:'workwechat',
                     loginUrl:'http://www.baidu.com',
                     displayName:"workweixin"
                 }]

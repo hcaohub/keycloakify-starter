@@ -1,14 +1,15 @@
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import type {PageProps} from "keycloakify/login/pages/PageProps";
 import {getKcClsx} from "keycloakify/login/lib/kcClsx";
 import type {KcContext} from "../KcContext";
 import type {I18n} from "../i18n";
 import axios from "axios";
 
-import {Button, Tabs, Tooltip} from 'antd';
+import {Button, Form, Tabs, Tooltip} from 'antd';
 import {createFromIconfontCN, LockOutlined, MobileOutlined, UserOutlined} from '@ant-design/icons';
 import {LoginForm, ProFormCaptcha, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
 import './Login.css';
+import CommonService,{providerIconParse} from "../CommonService";
 
 const IconFont = createFromIconfontCN({
     scriptUrl: `${import.meta.env.BASE_URL}iconfont/iconfont.js`,
@@ -34,18 +35,11 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
     const {msg, msgStr} = i18n;
 
-    const providerIconParse: { [k: string]: string } = {
-        github: "github",
-        gitee: "gitee",
-        weixin: "weixin",
-        workweixin: "qiyeweixin"
-    }
+
     const [type, setType] = useState<string>('account');
 
     const onGetCaptcha = async (phoneNumber: string) => {
         const params = {params: {phoneNumber}}
-        console.log("#### onGetCaptcha", window.location.origin + '/realms/{realm.name}/sms/authentication-code');
-        console.log("#### onGetCaptcha2", window.location.origin + '/realms/' + realm.name + '/sms/authentication-code');
         let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/authentication-code', params);
         console.log("###", res);
         if (res) {
@@ -53,22 +47,9 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         }
         // throw new Error(e.response.data.error)
     }
-    const onLogin = async (values: any) => {
-        console.log("#### login", url.loginAction, values)
-        document.getElelmentById("loginForm").submit()
-        // 创建 FormData 对象
-        // const formData = new FormData();
-        // for (const key in values) {
-        //     formData.append(key, values[key]);
-        // }
-        // let res = await fetch(url.loginAction, {
-        //     method: 'POST',
-        //     body: formData,
-        // });
-        // console.log("###", res);
-        // if (res.redirected) {
-        //     window.location.href = res.url;
-        // }
+    const [form] = Form.useForm();
+    const onLogin = async (values:{[key:string]:string}) => {
+        CommonService.formSubmit(url.loginAction,values);
     }
     useEffect(() => {
         console.log("###init", realm);
@@ -147,8 +128,9 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
             <div id="kc-form">
                 {realm.password && (
+                    <div>
                     <LoginForm
-                        
+                        form={form}
                         contentStyle={{
                             // minWidth: 280,
                             // maxWidth: '75vw',
@@ -277,6 +259,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             )}
                         </div>
                     </LoginForm>
+                    </div>
                 )}
             </div>
         </Template>
