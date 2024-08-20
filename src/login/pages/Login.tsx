@@ -1,7 +1,6 @@
-import {useEffect, useReducer, useState} from "react";
-import {assert} from "keycloakify/tools/assert";
+import {useState, useEffect} from "react";
 import type {PageProps} from "keycloakify/login/pages/PageProps";
-import {getKcClsx, type KcClsx} from "keycloakify/login/lib/kcClsx";
+import {getKcClsx} from "keycloakify/login/lib/kcClsx";
 import type {KcContext} from "../KcContext";
 import type {I18n} from "../i18n";
 import axios from "axios";
@@ -35,13 +34,45 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
     const {msg, msgStr} = i18n;
 
-    const providerIconParse = {
-        "github": "github",
-        "gitee": "gitee",
-        "weixin": "weixin",
-        "workweixin": "qiyeweixin"
+    const providerIconParse: { [k: string]: string } = {
+        github: "github",
+        gitee: "gitee",
+        weixin: "weixin",
+        workweixin: "qiyeweixin"
     }
     const [type, setType] = useState<string>('account');
+
+    const onGetCaptcha = async (phoneNumber: string) => {
+        const params = {params: {phoneNumber}}
+        console.log("#### onGetCaptcha", window.location.origin + '/realms/{realm.name}/sms/authentication-code');
+        console.log("#### onGetCaptcha2", window.location.origin + '/realms/' + realm.name + '/sms/authentication-code');
+        let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/authentication-code', params);
+        console.log("###", res);
+        if (res) {
+            return;
+        }
+        // throw new Error(e.response.data.error)
+    }
+    const onLogin = async (values: any) => {
+        console.log("#### login", url.loginAction, values)
+        document.getElelmentById("loginForm").submit()
+        // 创建 FormData 对象
+        // const formData = new FormData();
+        // for (const key in values) {
+        //     formData.append(key, values[key]);
+        // }
+        // let res = await fetch(url.loginAction, {
+        //     method: 'POST',
+        //     body: formData,
+        // });
+        // console.log("###", res);
+        // if (res.redirected) {
+        //     window.location.href = res.url;
+        // }
+    }
+    useEffect(() => {
+        console.log("###init", realm);
+    }, []);
 
     return (
         <Template
@@ -74,7 +105,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 {social.providers.map((...[p, , providers]) => (
                                     providers && p.alias && providerIconParse[p.alias] ?
                                         <Tooltip title={p.displayName}>
-                                            <Button id={`social-${p.alias}`} tip={"skdfhsk"} type="link"
+                                            <Button id={`social-${p.alias}`} type="link"
                                                     icon={<IconFont type={`icon-${providerIconParse[p.alias]}`}
                                                                     style={{fontSize: '24px'}}/>} href={p.loginUrl}>
                                             </Button>
@@ -117,6 +148,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
             <div id="kc-form">
                 {realm.password && (
                     <LoginForm
+                        
                         contentStyle={{
                             // minWidth: 280,
                             // maxWidth: '75vw',
@@ -129,8 +161,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                         }}
                         action={url.loginAction}
                         method="post"
-                        onFinish={async (values) => {
-                        }}
+                        onFinish={onLogin}
                     >
                         {!usernameHidden && supportPhone &&
                             < Tabs
@@ -201,11 +232,11 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     rules={[
                                         {
                                             required: true,
-                                            message: messagesPerField.existsError('code', 'phoneNumber'),
+                                            message: messagesPerField.getFirstError('phoneNumber'),
                                         },
                                         {
                                             pattern: /^1\d{10}$/,
-                                            message: messagesPerField.existsError('code', 'phoneNumber'),
+                                            message: messagesPerField.getFirstError('phoneNumber'),
                                         },
                                     ]}
                                 />
@@ -229,19 +260,10 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     rules={[
                                         {
                                             required: true,
-                                            message: messagesPerField.existsError('code', 'phoneNumber')
+                                            message: messagesPerField.getFirstError('code')
                                         },
                                     ]}
-                                    onGetCaptcha={async (phoneNumber) => {
-                                        const params = {params: {phoneNumber}}
-                                        let res =  await axios.get('/realms/' + realm.name + '/sms/authentication-code', params);
-                                        console.log("###",res);
-                                        if(res){
-                                            return ;
-                                        }
-                                        // throw new Error(e.response.data.error)
-
-                                    }}
+                                    onGetCaptcha={onGetCaptcha}
                                 />
                             </>
                         )}
