@@ -5,7 +5,7 @@ export const providerIconParse: { [k: string]: string } = {
     workwechat: "qiyeweixin"
 }
 export default {
-    async formSubmit(url:string,values:{[key:string]:string}) {
+    async formSubmit(url:string,values:{[key:string]:any}) {
         console.log("form submit", url,values)
         // 创建一个隐藏的表单并提交
         const hiddenForm = document.createElement('form');

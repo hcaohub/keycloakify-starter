@@ -21,7 +21,7 @@
         "@ant-design/pro-components": "^2.7.15",
         "antd": "^5.20.1",
         "axios": "^1.7.4",
-        "keycloakify": "10.0.0-rc.132",
+        "keycloakify": "^10.0.0-rc.145",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     },

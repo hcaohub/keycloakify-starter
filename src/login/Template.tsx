@@ -126,7 +126,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     return (
         <div className={kcClsx("kcLoginClass")}>
-            <ConfigProvider locale={antdLocale}>
+            <ConfigProvider locale={antdLocale} >
             <div id="kc-header" className={kcClsx("kcHeaderClass")}>
                 <div id="kc-header-wrapper" className={kcClsx("kcHeaderWrapperClass")}>
                     {/*{msg("loginTitleHtml", realm.displayNameHtml)}*/}

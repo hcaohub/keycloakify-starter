@@ -9,7 +9,9 @@ export type KcContextExtension = {
 
 export type KcContextExtensionPerPage = {
     "login.ftl": {
-        supportPhone:boolean
+        supportPhone:boolean,
+        attemptedPhoneActivated:boolean,
+
     }
 
 };

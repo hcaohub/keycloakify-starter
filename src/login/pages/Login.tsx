@@ -14,6 +14,7 @@ import CommonService,{providerIconParse} from "../CommonService";
 const IconFont = createFromIconfontCN({
     scriptUrl: `${import.meta.env.BASE_URL}iconfont/iconfont.js`,
 });
+
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const {kcContext, i18n, doUseDefaultCss, Template, classes} = props;
 
@@ -30,13 +31,14 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         login,
         registrationDisabled,
         messagesPerField,
-        supportPhone
+        supportPhone,
+        attemptedPhoneActivated,
     } = kcContext;
 
     const {msg, msgStr} = i18n;
 
 
-    const [type, setType] = useState<string>('account');
+    const [type, setType] = useState<string>(attemptedPhoneActivated?'mobile':'account');
 
     const onGetCaptcha = async (phoneNumber: string) => {
         const params = {params: {phoneNumber}}
@@ -48,11 +50,14 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         // throw new Error(e.response.data.error)
     }
     const [form] = Form.useForm();
-    const onLogin = async (values:{[key:string]:string}) => {
+    const onLogin = async (values:{[key:string]:any}) => {
+        if(values.phoneNumber){
+            values.phoneActivated=true;
+        }
         CommonService.formSubmit(url.loginAction,values);
     }
     useEffect(() => {
-        console.log("###init", realm);
+        console.log("existsError username password phoneNumber code",messagesPerField.existsError("username", "password","phoneNumber","code"));
     }, []);
 
     return (
@@ -61,7 +66,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
             i18n={i18n}
             doUseDefaultCss={doUseDefaultCss}
             classes={classes}
-            displayMessage={!messagesPerField.existsError("username", "password")}
+            // displayMessage={!messagesPerField.existsError("username", "password","phoneNumber","code")}
+            displayMessage={true}
             headerNode={msg("loginAccountTitle")}
             displayInfo={realm.password && realm.registrationAllowed && !registrationDisabled}
             infoNode={
@@ -88,7 +94,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         <Tooltip title={p.displayName}>
                                             <Button id={`social-${p.alias}`} type="link"
                                                     icon={<IconFont type={`icon-${providerIconParse[p.alias]}`}
-                                                                    style={{fontSize: '24px'}}/>} href={p.loginUrl}>
+                                                                    style={{fontSize: '24px'}}/>}
+                                                    onClick={()=>{window.location.href=p.loginUrl}}>
                                             </Button>
                                         </Tooltip>
                                         :
@@ -180,7 +187,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         rules={[
                                             {
                                                 required: true,
-                                                message: messagesPerField.getFirstError("username"),
+                                                message: msgStr("missingUsernameMessage"),
                                             },
                                         ]}
                                     />
@@ -195,7 +202,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     rules={[
                                         {
                                             required: true,
-                                            message: messagesPerField.getFirstError("password"),
+                                            message: msgStr("missingPasswordMessage"),
                                         },
                                     ]}
                                 />
@@ -214,11 +221,11 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     rules={[
                                         {
                                             required: true,
-                                            message: messagesPerField.getFirstError('phoneNumber'),
+                                            message: msgStr("requiredPhoneNumber"),
                                         },
                                         {
                                             pattern: /^1\d{10}$/,
-                                            message: messagesPerField.getFirstError('phoneNumber'),
+                                            message: msgStr("invalidPhoneNumber"),
                                         },
                                     ]}
                                 />
@@ -242,7 +249,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     rules={[
                                         {
                                             required: true,
-                                            message: messagesPerField.getFirstError('code')
+                                            message: msgStr("verificationCodeDoesNotMatch"),
                                         },
                                     ]}
                                     onGetCaptcha={onGetCaptcha}

@@ -47,3 +47,45 @@ export default function KcPage(props: { kcContext: KcContext }) {
     );
 }
 ----
+
+
+== 问题
+
+=== 每次打包jar包的大小都会逐渐增加
+
+.缓存问题-解决方法
+https://docs.keycloakify.dev/configuration-options/xdg_cache_home[XDG_CACHE_HOME]
+
+=== i18n.ts中自定义了中文，但是在页面上未生效，显示的还是英文
+
+==== 排查方式
+keycloak admin->realm->Realm setting->Localization->Effective message bundle输入主题、主题类型、语言、i18n文件中配置的key名字（比如phoneUserNotFound）->search，即可查看当前主题生效的消息内容是什么。
+
+==== 原因
+语言中存在-或_符号（zh-CN、zh-TW、pt-BR）的都会有问题，因为keycloak官方解析zh-CN时是从messages_zh_CN.properties（theme/base/admin/messages/messages_zh_CN.properties）文件中读取消息；keycloakify在生成消息文件时生成的文件名为messages_zh-CN.properties（参考https://github.com/keycloakify/keycloakify/issues/554），因此导致通过keycloakify自定义的语言消息不生效；且keycloakify不支持zh-TW语言，因为在node_modules/keycloakify/login/i18n/messages_defaultSet中没有默认的配置
+
+
+==== 解决方案
+===== 方案一：定义一个新的主题
+
+.theme.properties
+[source,javascript,tabsize=2]
+----
+parent=hc-react //继承当前主题
+----
+
+.准备messages_zh_CN.properties
+当前项目编译打包后->copy ${XDG_CACHE_HOME}/keycloakify/maven/keycloak-theme-for-kc-21-and-below/src/main/resources/theme/hc-react/login/messages/messages_zh-CN.properties theme/hc-react2/login/messages/messages_zh_CN.properties
+
+同理自己维护一套繁体消息存储到theme/hc-react2/login/messages/messages_zh_TW.properties即可
+
+.应用
+keycloak配置主题时选择hc-react2
+
+===== 方案二：Keycloak admin上重写消息
+
+.配置消息
+keycloak admin->realm->Realm setting->Localization->Realm overrides ->Add trannslation->key=消息key value=消息内容
+
+.检查是否生效
+keycloak admin->realm->Realm setting->Localization->Effective message bundle

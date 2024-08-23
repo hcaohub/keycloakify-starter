@@ -15,6 +15,7 @@ if (import.meta.env.DEV) {
                 loginAction:"http://www.baidu.com"
             },
             supportPhone:true,
+            attemptedPhoneActivated:true,
             "x-keycloakify": {messages: {
 
                     loginByPassword:"密码登录",
