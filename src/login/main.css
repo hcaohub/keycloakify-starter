@@ -18,5 +18,5 @@ a {
 .ant-alert {
     border: none !important; /* 去掉边框 */
     background-color: transparent; /* 背景透明 */
-    padding: 0; /* 去掉内边距 */
+    padding: 15px; /* 去掉内边距 */
 }

@@ -33,7 +33,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
     const {msg, msgStr} = i18n;
 
 
-    const [type, setType] = useState<string>(attemptedPhoneActivated ? 'mobile' : 'account');
+    const [type, setType] = useState<string>(supportPhone&&attemptedPhoneActivated ? 'mobile' : 'account');
 
     const onGetCaptcha = async (phoneNumber: string) => {
         const params = {params: {phoneNumber}}
