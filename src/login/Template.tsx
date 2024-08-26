@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {useEffect,useState} from "react";
 import {assert} from "keycloakify/tools/assert";
 import {clsx} from "keycloakify/tools/clsx";
@@ -8,7 +9,7 @@ import {useInsertLinkTags} from "keycloakify/tools/useInsertLinkTags";
 import {useSetClassName} from "keycloakify/tools/useSetClassName";
 import type {I18n} from "./i18n";
 import type {KcContext} from "./KcContext";
-import {ConfigProvider} from 'antd';
+import {ConfigProvider, Select} from 'antd';
 import enUS from 'antd/locale/en_US';
 import zhCN from 'antd/locale/zh_CN';
 export default function Template(props: TemplateProps<KcContext, I18n>) {
@@ -36,6 +37,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
     const { realm, locale, auth, url, message, isAppInitiatedAction, authenticationSession, scripts } = kcContext;
 
     useEffect(() => {
+        console.log("#----->",`${url.resourcesPath}/css/login.css`)
         document.title = documentTitle ?? msgStr("loginTitle", kcContext.realm.displayName);
     }, []);
 
@@ -49,8 +51,16 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         className: bodyClassName ?? kcClsx("kcBodyClass")
     });
 
+    const [languageSelect, setLanguageSelect] = useState([]);
+
     useEffect(() => {
         const { currentLanguageTag } = locale ?? {};
+
+        locale.supported.map((item)=>{
+            languageSelect.push({ label: labelBySupportedLanguageTag[item.languageTag], value: item.languageTag})
+        })
+        console.log("##@#@#",languageSelect)
+        setLanguageSelect(languageSelect);
 
         if (currentLanguageTag === undefined) {
             return;
@@ -114,7 +124,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     useEffect(() => {
         console.log("---->",kcContext);
-        console.log("###",props);
+        console.log("###",kcClsx("kcLoginClass"));
         if (areAllStyleSheetsLoaded) {
             insertScriptTags();
         }
@@ -126,58 +136,72 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     return (
         <div className={kcClsx("kcLoginClass")}>
-            <ConfigProvider locale={antdLocale} >
-            <div id="kc-header" className={kcClsx("kcHeaderClass")}>
-                <div id="kc-header-wrapper" className={kcClsx("kcHeaderWrapperClass")}>
-                    {/*{msg("loginTitleHtml", realm.displayNameHtml)}*/}
-                    <img src={`${import.meta.env.BASE_URL}images/logo.png`} width={100}/>
-                </div>
-            </div>
+            <ConfigProvider locale={antdLocale} theme={{
+                token: {
+                    // Seed Token，影响范围大
+                    colorPrimary: '#f65405',
+                },
+            }}>
+            {/*<div id="kc-header" className={kcClsx("kcHeaderClass")}>*/}
+            {/*    <div id="kc-header-wrapper" className={kcClsx("kcHeaderWrapperClass")}>*/}
+            {/*        /!*{msg("loginTitleHtml", realm.displayNameHtml)}*!/*/}
+            {/*        <img src={`${import.meta.env.BASE_URL}images/logo.png`} width={100}/>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
             <div className={kcClsx("kcFormCardClass")}>
                 <header className={kcClsx("kcFormHeaderClass")}>
                     {realm.internationalizationEnabled && (assert(locale !== undefined), locale.supported.length > 1) && (
-                        <div className={kcClsx("kcLocaleMainClass")} id="kc-locale">
-                            <div id="kc-locale-wrapper" className={kcClsx("kcLocaleWrapperClass")}>
-                                <div id="kc-locale-dropdown" className={clsx("menu-button-links", kcClsx("kcLocaleDropDownClass"))}>
-                                    <button
-                                        tabIndex={1}
-                                        id="kc-current-locale-link"
-                                        aria-label={msgStr("languages")}
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                        aria-controls="language-switch1"
-                                    >
-                                        {labelBySupportedLanguageTag[currentLanguageTag]}
-                                    </button>
-                                    <ul
-                                        role="menu"
-                                        tabIndex={-1}
-                                        aria-labelledby="kc-current-locale-link"
-                                        aria-activedescendant=""
-                                        id="language-switch1"
-                                        className={kcClsx("kcLocaleListClass")}
-                                    >
-                                        {locale.supported.map(({ languageTag }, i) => (
-                                            <li key={languageTag} className={kcClsx("kcLocaleListItemClass")} role="none">
-                                                <a
-                                                    role="menuitem"
-                                                    id={`language-${i + 1}`}
-                                                    className={kcClsx("kcLocaleItemClass")}
-                                                    href={getChangeLocaleUrl(languageTag)}
-                                                >
-                                                    {labelBySupportedLanguageTag[languageTag]}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        <Select
+                            variant="borderless"
+                            defaultValue={currentLanguageTag}
+                            onChange={(value)=>{
+                                window.location.href=getChangeLocaleUrl(value);
+                            }}
+                            className={"languageSelect"}
+                            options={languageSelect}
+                        />
+                        // <div className={kcClsx("kcLocaleMainClass")} id="kc-locale">
+                        //     <div id="kc-locale-wrapper" className={kcClsx("kcLocaleWrapperClass")}>
+                        //         <div id="kc-locale-dropdown" className={clsx("menu-button-links", kcClsx("kcLocaleDropDownClass"))}>
+                        //             <button
+                        //                 tabIndex={1}
+                        //                 id="kc-current-locale-link"
+                        //                 aria-label={msgStr("languages")}
+                        //                 aria-haspopup="true"
+                        //                 aria-expanded="false"
+                        //                 aria-controls="language-switch1"
+                        //             >
+                        //                 {labelBySupportedLanguageTag[currentLanguageTag]}
+                        //             </button>
+                        //             <ul
+                        //                 role="menu"
+                        //                 tabIndex={-1}
+                        //                 aria-labelledby="kc-current-locale-link"
+                        //                 aria-activedescendant=""
+                        //                 id="language-switch1"
+                        //                 className={kcClsx("kcLocaleListClass")}
+                        //             >
+                        //                 {locale.supported.map(({ languageTag }, i) => (
+                        //                     <li key={languageTag} className={kcClsx("kcLocaleListItemClass")} role="none">
+                        //                         <a
+                        //                             role="menuitem"
+                        //                             id={`language-${i + 1}`}
+                        //                             className={kcClsx("kcLocaleItemClass")}
+                        //                             href={getChangeLocaleUrl(languageTag)}
+                        //                         >
+                        //                             {labelBySupportedLanguageTag[languageTag]}
+                        //                         </a>
+                        //                     </li>
+                        //                 ))}
+                        //             </ul>
+                        //         </div>
+                        //     </div>
+                        // </div>
                     )}
                     {(() => {
                         const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
-                            <h1 id="kc-page-title">{headerNode}</h1>
+                            <h1 id="kc-page-title"></h1>
                         ) : (
                             <div id="kc-username" className={kcClsx("kcFormGroupClass")}>
                                 <label id="kc-attempted-username">{auth.attemptedUsername}</label>
@@ -210,28 +234,28 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 <div id="kc-content">
                     <div id="kc-content-wrapper">
                         {/* App-initiated actions should not see warning messages about the need to complete the action during login. */}
-                        {displayMessage && message !== undefined && (message.type !== "warning" || !isAppInitiatedAction) && (
-                            <div
-                                className={clsx(
-                                    `alert-${message.type}`,
-                                    kcClsx("kcAlertClass"),
-                                    `pf-m-${message?.type === "error" ? "danger" : message.type}`
-                                )}
-                            >
-                                <div className="pf-c-alert__icon">
-                                    {message.type === "success" && <span className={kcClsx("kcFeedbackSuccessIcon")}></span>}
-                                    {message.type === "warning" && <span className={kcClsx("kcFeedbackWarningIcon")}></span>}
-                                    {message.type === "error" && <span className={kcClsx("kcFeedbackErrorIcon")}></span>}
-                                    {message.type === "info" && <span className={kcClsx("kcFeedbackInfoIcon")}></span>}
-                                </div>
-                                <span
-                                    className={kcClsx("kcAlertTitleClass")}
-                                    dangerouslySetInnerHTML={{
-                                        __html: message.summary
-                                    }}
-                                />
-                            </div>
-                        )}
+                        {/*{displayMessage && message !== undefined && (message.type !== "warning" || !isAppInitiatedAction) && (*/}
+                        {/*    <div*/}
+                        {/*        className={clsx(*/}
+                        {/*            `alert-${message.type}`,*/}
+                        {/*            kcClsx("kcAlertClass"),*/}
+                        {/*            `pf-m-${message?.type === "error" ? "danger" : message.type}`*/}
+                        {/*        )}*/}
+                        {/*    >*/}
+                        {/*        <div className="pf-c-alert__icon">*/}
+                        {/*            {message.type === "success" && <span className={kcClsx("kcFeedbackSuccessIcon")}></span>}*/}
+                        {/*            {message.type === "warning" && <span className={kcClsx("kcFeedbackWarningIcon")}></span>}*/}
+                        {/*            {message.type === "error" && <span className={kcClsx("kcFeedbackErrorIcon")}></span>}*/}
+                        {/*            {message.type === "info" && <span className={kcClsx("kcFeedbackInfoIcon")}></span>}*/}
+                        {/*        </div>*/}
+                        {/*        <span*/}
+                        {/*            className={kcClsx("kcAlertTitleClass")}*/}
+                        {/*            dangerouslySetInnerHTML={{*/}
+                        {/*                __html: message.summary*/}
+                        {/*            }}*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
                         {children}
                         {auth !== undefined && auth.showTryAnotherWayLink && (
                             <form id="kc-select-try-another-way-form" action={url.loginAction} method="post">

@@ -1,0 +1,22 @@
+a {
+    color: #f65405;
+}
+
+/*.card-pf {*/
+/*    border-color: #f65405;*/
+/*}*/
+
+.languageSelect {
+    width: 100px;
+    position: fixed;
+    right: 16px;
+    top: 30px;
+    border-radius: 4px;
+    z-index: 10000;
+    background-color: white;
+}
+.ant-alert {
+    border: none !important; /* 去掉边框 */
+    background-color: transparent; /* 背景透明 */
+    padding: 0; /* 去掉内边距 */
+}
