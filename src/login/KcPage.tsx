@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Suspense, lazy,useMemo } from "react";
 import type { ClassKey } from "keycloakify/login";
 import type { KcContext } from "./KcContext";
@@ -5,11 +6,12 @@ import { useI18n } from "./i18n";
 import DefaultPage from "keycloakify/login/DefaultPage";
 import Template from "./Template";
 const UserProfileFormFields = lazy(
-    () => import("keycloakify/login/UserProfileFormFields")
+    () => import("./UserProfileFormFields")
 );
 
 const doMakeUserConfirmPassword = true;
 const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 
 export default function KcPage(props: { kcContext: KcContext }) {
     const { kcContext } = props;
@@ -25,6 +27,15 @@ export default function KcPage(props: { kcContext: KcContext }) {
                             {...{ kcContext, i18n, classes }}
                             Template={Template}
                             doUseDefaultCss={false}
+                        />
+                    );
+                    case "register.ftl": return (
+                        <Register
+                            {...{ kcContext, i18n, classes }}
+                            Template={Template}
+                            doUseDefaultCss={false}
+                            // UserProfileFormFields={UserProfileFormFields}
+                            doMakeUserConfirmPassword={doMakeUserConfirmPassword}
                         />
                     );
                     default:
@@ -53,8 +64,6 @@ function useCustomStyles(kcContext: KcContext) {
         let classes: { [key in ClassKey]?: string } = {
             // Your classes that applies to all pages
         };
-        console.log(kcContext.pageId)
-
         // switch (kcContext.pageId) {
         //     case "login.ftl":
         //         // You login page specific stylesheet.

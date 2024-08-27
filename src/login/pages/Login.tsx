@@ -33,7 +33,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
     const {msg, msgStr} = i18n;
 
 
-    const [type, setType] = useState<string>(supportPhone&&attemptedPhoneActivated ? 'mobile' : 'account');
+    const [type, setType] = useState<string>(supportPhone && attemptedPhoneActivated ? 'mobile' : 'account');
 
     const onGetCaptcha = async (phoneNumber: string) => {
         const params = {params: {phoneNumber}}
@@ -67,7 +67,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
             <div style={{
                 backgroundColor: 'white',
-                height: '100vh',
+                // height: '100vh',
+                width:'100%'
             }}>
                 {realm.password && (
                     <LoginFormPage
@@ -87,19 +88,19 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             username: login.username ?? ""
                         }}
                         message={
-                            (message !== undefined && (message.type !== "warning" || !isAppInitiatedAction))&&
+                            (message !== undefined && (message.type !== "warning" || !isAppInitiatedAction)) &&
                             <Alert message={message.summary} type={message.type} showIcon/>
                         }
                         actions={
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    flexDirection: 'column',
-                                }}
-                            >
-                                <Divider plain>
+                            <div>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        flexDirection: 'column',
+                                    }}>
+                                    <Divider plain>
                                   <span
                                       style={{
                                           fontWeight: 'normal',
@@ -108,33 +109,31 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                   >
                                     {msg("identity-provider-login-label")}
                                   </span>
-                                </Divider>
-                                <Space align="center" size={24} key={1}>
-                                    {social?.providers?.map((p, index) => (
-                                        p.alias && providerIconParse[p.alias] ?
-                                            <Tooltip title={p.displayName} key={index}>
-                                                <Button id={`social-${p.alias}`} type="link"
-                                                        icon={<IconFont type={`icon-${providerIconParse[p.alias]}`}
-                                                                        style={{fontSize: '24px'}}/>}
-                                                        onClick={() => {
-                                                            window.location.href = p.loginUrl
-                                                        }}>
+                                    </Divider>
+                                    <Space align="center" size={24} key={1}>
+                                        {social?.providers?.map((p, index) => (
+                                            p.alias && providerIconParse[p.alias] ?
+                                                <Tooltip title={p.displayName} key={index}>
+                                                    <Button id={`social-${p.alias}`} type="link"
+                                                            icon={<IconFont type={`icon-${providerIconParse[p.alias]}`}
+                                                                            style={{fontSize: '24px'}}/>}
+                                                            onClick={() => {
+                                                                window.location.href = p.loginUrl
+                                                            }}>
+                                                    </Button>
+                                                </Tooltip>
+                                                :
+                                                <Button id={`social-${p.alias}`} href={p.loginUrl} key={index}>
+                                                    {p.displayName}
                                                 </Button>
-                                            </Tooltip>
-                                            :
-                                            <Button id={`social-${p.alias}`} href={p.loginUrl} key={index}>
-                                                {p.displayName}
-                                            </Button>
-                                    ))}
-                                </Space>
+                                        ))}
+                                    </Space>
+                                </div>
                                 {realm.password && realm.registrationAllowed && !registrationDisabled &&
-                                    <div style={{
-                                        fontSize: 14,
-                                        marginTop: '20px',
-                                    }}>
-                                            {msg("noAccount")}{" "}
+                                    <div className={"bottom-span"}>
+                                        {msg("noAccount")}{" "}
                                         <a tabIndex={8} href={url.registrationUrl}>{msg("doRegister")}</a>
-                                        </div>
+                                    </div>
                                 }
                             </div>
                         }
@@ -244,12 +243,12 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 />
                             </>
                         )}
-                        <div style={{marginBottom: 24,}}>
+                        <div>
                             {realm.rememberMe && !usernameHidden && (
-                                <ProFormCheckbox noStyle name="rememberMe"> {msg("rememberMe")}</ProFormCheckbox>
+                                <ProFormCheckbox style={{marginBottom: 24,}} noStyle name="rememberMe"> {msg("rememberMe")}</ProFormCheckbox>
                             )}
                             {realm.resetPasswordAllowed && (
-                                <a style={{float: 'right',}}
+                                <a style={{float: 'right',marginBottom: 24}}
                                    href={url.loginResetCredentialsUrl}>{msg("doForgotPassword")}</a>
                             )}
                         </div>

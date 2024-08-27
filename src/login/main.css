@@ -7,16 +7,20 @@ a {
 /*}*/
 
 .languageSelect {
-    width: 100px;
-    position: fixed;
-    right: 16px;
-    top: 30px;
-    border-radius: 4px;
-    z-index: 10000;
-    background-color: white;
+    /*width: 100px;*/
+    /*position: fixed;*/
+    /*right: 16px;*/
+    /*top: 30px;*/
+    /*border-radius: 4px;*/
+    /*z-index: 10000;*/
+    /*background-color: white;*/
 }
 .ant-alert {
     border: none !important; /* 去掉边框 */
     background-color: transparent; /* 背景透明 */
     padding: 15px; /* 去掉内边距 */
+}
+.bottom-span{
+    font-size: 14px;
+    margin-top: 20px;
 }
