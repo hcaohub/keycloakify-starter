@@ -11,7 +11,8 @@ export default function UserProfileFormFields(props) {
 
     const {
         realm,
-        verifyPhone
+        verifyPhone,
+        registrationPhoneNumberAsUsername
     } = kcContext;
 
     const {msgStr, advancedMsg} = i18n;
@@ -35,6 +36,11 @@ export default function UserProfileFormFields(props) {
         let _group = {};
         let _defaultValue = {};
         formFieldStates?.map((field) => {
+            if(realm.registrationEmailAsUsername || registrationPhoneNumberAsUsername){
+                if(field?.attribute?.name=="username"){
+                    return;
+                }
+            }
             let groupName = field?.attribute?.group?.name;
             if (!groupName) {
                 _defaultField.push(field);
