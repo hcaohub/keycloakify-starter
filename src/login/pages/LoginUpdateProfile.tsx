@@ -5,9 +5,10 @@ import type {I18n} from "../i18n";
 
 import {Button, Form,} from 'antd';
 import CommonService from "../CommonService";
+import {useState} from "react";
 
 
-export default function Register(props: PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n>) {
+export default function LoginUpdateProfile(props: PageProps<Extract<KcContext, { pageId: "login-update-profile.ftl" }>, I18n>) {
     const {
         kcContext,
         i18n,
@@ -18,14 +19,19 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
     } = props;
 
     const {
-        url,
+        url,isAppInitiatedAction
     } = kcContext;
 
     const {msg} = i18n;
 
 
+    const [cancelAia, setCancelAia] = useState(false);
     const onRegister = async (values: { [key: string]: any }) => {
-        CommonService.formSubmit(url.registrationAction, values);
+        if(cancelAia){
+            values["cancel-aia"]=true;
+        }
+        setCancelAia(false);
+        CommonService.formSubmit(url.loginAction, values);
     }
 
     const [form] = Form.useForm();
@@ -33,6 +39,10 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
         if (defaultValue) {
             form.setFieldsValue(defaultValue)
         }
+    } ;
+    const doCancel = () => {
+        setCancelAia(true);
+        form.submit();
     }
     return (
         <Template
@@ -56,13 +66,18 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                            callbackDefaultValue={callbackDefaultValue}/>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" block>
-                            {msg("doRegister")}
+                            {msg("doSubmit")}
                         </Button>
                     </Form.Item>
+                    <Form.Item>
+                        {isAppInitiatedAction&&
+
+                        <Button type="primary" htmlType="button"  block onClick={doCancel}>
+                            {msg("doCancel")}
+                        </Button>
+                        }
+                    </Form.Item>
                 </Form>
-                <div className={"bottom-span"}>
-                    <a href={url.loginUrl}>{msg("backToLogin")}</a>
-                </div>
             </div>
         </Template>
     );

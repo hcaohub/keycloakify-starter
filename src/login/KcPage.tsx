@@ -7,13 +7,14 @@ import DefaultPage from "keycloakify/login/DefaultPage";
 import Template from "./Template";
 
 const UserProfileFormFields = lazy(
-    () => import("keycloakify/login/UserProfileFormFields")
+    () => import("./UserProfileFormFields")
 );
 
 const doMakeUserConfirmPassword = true;
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const LoginResetPassword = lazy(() => import("./pages/LoginResetPassword"));
+const LoginUpdateProfile = lazy(() => import("./pages/LoginUpdateProfile"));
 
 export default function KcPage(props: { kcContext: KcContext }) {
     const { kcContext } = props;
@@ -36,7 +37,7 @@ export default function KcPage(props: { kcContext: KcContext }) {
                             {...{ kcContext, i18n, classes }}
                             Template={Template}
                             doUseDefaultCss={false}
-                            // UserProfileFormFields={UserProfileFormFields}
+                            UserProfileFormFields={UserProfileFormFields}
                             doMakeUserConfirmPassword={doMakeUserConfirmPassword}
                         />
                     );
@@ -45,6 +46,15 @@ export default function KcPage(props: { kcContext: KcContext }) {
                             {...{ kcContext, i18n, classes }}
                             Template={Template}
                             doUseDefaultCss={false}
+                        />
+                    );
+                    case "login-update-profile.ftl": return (
+                        <LoginUpdateProfile
+                            {...{ kcContext, i18n, classes }}
+                            Template={Template}
+                            doUseDefaultCss={false}
+                            UserProfileFormFields={UserProfileFormFields}
+                            doMakeUserConfirmPassword={doMakeUserConfirmPassword}
                         />
                     );
                     default:
