@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import type { ExtendKcContext } from "keycloakify/login";
-import type { KcEnvName, ThemeName } from "../kc.gen";
+import type {ExtendKcContext} from "keycloakify/login";
+import type {KcEnvName, ThemeName} from "../kc.gen";
 
 export type KcContextExtension = {
     themeName: ThemeName;
@@ -8,8 +8,16 @@ export type KcContextExtension = {
 };
 
 export type KcContextExtensionPerPage = {
-    supportPhone:boolean,
-    attemptedPhoneActivated:boolean,
+    "login.ftl": {
+        supportPhone: boolean,
+        attemptedPhoneActivated: boolean,
+
+    }, "login-reset-password.ftl": {
+        supportPhone: boolean,
+        attemptedPhoneActivated: boolean,
+
+    }
+
 };
 
 export type KcContext = ExtendKcContext<KcContextExtension, KcContextExtensionPerPage>;
