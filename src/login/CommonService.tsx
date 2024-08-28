@@ -1,6 +1,7 @@
 import {ProFormCaptcha,} from '@ant-design/pro-components';
 import {LockOutlined} from "@ant-design/icons";
-
+import {message} from 'antd';
+import axios from "axios";
 export const providerIconParse: { [k: string]: string } = {
     github: "github",
     gitee: "gitee",
@@ -107,6 +108,17 @@ export default {
             ]}
             onGetCaptcha={onGetCaptcha}
         />
+    },
+    async sendVerificationCode(phoneNumber: string,url:string){
+        const params = {params: {phoneNumber}}
+        let res = await axios.get(url, params).catch((e)=>{
+            console.log("###", e);
+            message.error(e?.response?.data?.error||e.message)
+            return Promise.reject(new Error(e?.response?.data?.error||e.message));
+        });
+        if (res) {
+            return;
+        }
     }
 
 }

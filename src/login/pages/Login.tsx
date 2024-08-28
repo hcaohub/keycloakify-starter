@@ -218,7 +218,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         },
                                     ]}
                                 />
-                                {CommonService.captchaFormItem(msgStr,onGetCaptcha,false)}
+                                {CommonService.captchaFormItem(msgStr,(phoneNumber)=>{return CommonService.sendVerificationCode(phoneNumber,window.location.origin + '/realms/' + realm.name + '/sms/authentication-code')},false)}
                             </>
                         )}
                         <div>

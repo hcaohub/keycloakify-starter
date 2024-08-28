@@ -1,7 +1,6 @@
 // @ts-nocheck
 import {useEffect, useState} from "react";
 import {assert} from "keycloakify/tools/assert";
-import {clsx} from "keycloakify/tools/clsx";
 import type {TemplateProps} from "keycloakify/login/TemplateProps";
 import {getKcClsx} from "keycloakify/login/lib/kcClsx";
 import {useInsertScriptTags} from "keycloakify/tools/useInsertScriptTags";
@@ -9,10 +8,9 @@ import {useInsertLinkTags} from "keycloakify/tools/useInsertLinkTags";
 import {useSetClassName} from "keycloakify/tools/useSetClassName";
 import type {I18n} from "./i18n";
 import type {KcContext} from "./KcContext";
-import {Button, Checkbox, ConfigProvider, Form, Input, Layout, Select} from 'antd';
+import {ConfigProvider, Layout, Select} from 'antd';
 import enUS from 'antd/locale/en_US';
 import zhCN from 'antd/locale/zh_CN';
-import {PageContainer} from '@ant-design/pro-components';
 import {contentStyle, footerStyle, headerStyle, layoutStyle} from "./CommonService";
 
 const { Header, Footer, Sider, Content } = Layout;

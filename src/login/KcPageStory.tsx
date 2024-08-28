@@ -12,10 +12,8 @@ const kcContextExtension: KcContextExtension = {
     }
 };
 const kcContextExtensionPerPage: KcContextExtensionPerPage = {
-    "login.ftl": {
-        supportPhone: false,
-        attemptedPhoneActivated:false,
-    }
+    supportPhone: false,
+    attemptedPhoneActivated:false,
 };
 
 export const {getKcContextMock} = createGetKcContextMock({

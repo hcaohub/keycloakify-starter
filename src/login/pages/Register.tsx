@@ -40,18 +40,6 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
     });
 
 
-    const onGetCaptcha = async (phoneNumber: string) => {
-        const params = {params: {phoneNumber}}
-        let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/registration-code', params).catch((e)=>{
-            console.log("###", e);
-            antMsg.error(e?.response?.data?.error||e.message)
-            return Promise.reject(new Error(e?.response?.data?.error||e.message));
-        });
-        if (res) {
-            return;
-        }
-        // throw new Error(e.response.data.error)
-    }
     const onRegister = async (values: { [key: string]: any }) => {
         console.log("#@#@##@", values)
         CommonService.formSubmit(url.registrationAction, values);
@@ -167,7 +155,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
             }
             {verifyPhone&&attribute.name === "phoneNumber" &&(
                 <List.Item key={-2}>
-                    {CommonService.captchaFormItem(msgStr,onGetCaptcha,true)}
+                    {CommonService.captchaFormItem(msgStr,(phoneNumber)=>{return CommonService.sendVerificationCode(phoneNumber,window.location.origin + '/realms/' + realm.name + '/sms/registration-code')},true)}
                 </List.Item>
             )}
         </>
