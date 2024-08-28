@@ -16,6 +16,8 @@ const Register = lazy(() => import("./pages/Register"));
 const LoginResetPassword = lazy(() => import("./pages/LoginResetPassword"));
 const LoginUpdateProfile = lazy(() => import("./pages/LoginUpdateProfile"));
 const LoginUpdatePassword = lazy(() => import("./pages/LoginUpdatePassword"));
+const Error = lazy(() => import("./pages/Error"));
+const LoginPageExpired = lazy(() => import("./pages/LoginPageExpired"));
 
 export default function KcPage(props: { kcContext: KcContext }) {
     const { kcContext } = props;
@@ -65,6 +67,20 @@ export default function KcPage(props: { kcContext: KcContext }) {
                             doUseDefaultCss={false}
                             UserProfileFormFields={UserProfileFormFields}
                             doMakeUserConfirmPassword={doMakeUserConfirmPassword}
+                        />
+                    );
+                    case "error.ftl": return (
+                        <Error
+                            {...{ kcContext, i18n, classes }}
+                            Template={Template}
+                            doUseDefaultCss={false}
+                        />
+                    );
+                    case "login-page-expired.ftl": return (
+                        <LoginPageExpired
+                            {...{ kcContext, i18n, classes }}
+                            Template={Template}
+                            doUseDefaultCss={false}
                         />
                     );
                     default:
