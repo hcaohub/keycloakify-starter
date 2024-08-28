@@ -44,8 +44,8 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
         const params = {params: {phoneNumber}}
         let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/registration-code', params).catch((e)=>{
             console.log("###", e);
-            antMsg.error(e?.response?.error||e.message)
-            return Promise.reject(new Error(e?.response?.error||e.message));
+            antMsg.error(e?.response?.data?.error||e.message)
+            return Promise.reject(new Error(e?.response?.data?.error||e.message));
         });
         if (res) {
             return;

@@ -39,8 +39,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         const params = {params: {phoneNumber}}
         let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/authentication-code', params).catch((e)=>{
             console.log("###", e);
-            antMsg.error(e?.response?.error||e.message)
-            return Promise.reject(new Error(e?.response?.error||e.message));
+            antMsg.error(e?.response?.data?.error||e.message)
+            return Promise.reject(new Error(e?.response?.data?.error||e.message));
         });
         if (res) {
             return;
@@ -70,7 +70,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
             <div style={{
                 backgroundColor: 'white',
                 // height: '100vh',
-                width:'100%'
+                width:'100%',
             }}>
                 {realm.password && (
                     <LoginFormPage
@@ -84,7 +84,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             maxWidth: '75vw',
                         }}
                         title={msg("loginAccountTitle")}
-                        // subTitle={msg("loginAccountTitle")}
+                        subTitle={<div></div>}
                         initialValues={{
                             rememberMe: !!login.rememberMe,
                             username: login.username ?? ""
