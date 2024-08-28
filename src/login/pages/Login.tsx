@@ -80,8 +80,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
                         form={form}
                         containerStyle={{
-                            minWidth: 280,
-                            maxWidth: '75vw',
+                            // minWidth: 280,
+                            // maxWidth: '75vw',
                         }}
                         title={msg("loginAccountTitle")}
                         subTitle={<div></div>}

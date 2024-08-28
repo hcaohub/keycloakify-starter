@@ -3,13 +3,10 @@ import {useEffect, useState} from "react";
 import type {PageProps} from "keycloakify/login/pages/PageProps";
 import type {KcContext} from "../KcContext";
 import type {I18n} from "../i18n";
-import axios from "axios";
 
-import {Alert, Button, Checkbox, Form, Input, List, Radio, Select,message as antMsg,} from 'antd';
+import {Alert, Button, Checkbox, Form, Input, List, Radio, Select,} from 'antd';
 import CommonService from "../CommonService";
 import {useUserProfileForm} from "keycloakify/login/lib/useUserProfileForm";
-import {ProFormCaptcha,} from '@ant-design/pro-components';
-import {LockOutlined} from "@ant-design/icons";
 
 
 export default function Register(props: PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n>) {
@@ -230,7 +227,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
             // displayMessage={!messagesPerField.existsError("username", "password","phoneNumber","code")}
             displayMessage={true}
         >
-            <div style={{width: '50%'}}>
+            <div className={"content-div"}>
                 <Form
                     name="basic"
                     labelCol={{span: 10}}
@@ -274,7 +271,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                     </List>
 
 
-                    <Form.Item wrapperCol={{offset: 4, span: 16}}>
+                    <Form.Item>
                         <Button type="primary" htmlType="submit" block>
                             {msg("doRegister")}
                         </Button>

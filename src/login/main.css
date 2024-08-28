@@ -15,12 +15,56 @@ a {
     /*z-index: 10000;*/
     /*background-color: white;*/
 }
+
 .ant-alert {
     border: none !important; /* 去掉边框 */
     background-color: transparent; /* 背景透明 */
     padding: 15px; /* 去掉内边距 */
 }
-.bottom-span{
+
+.bottom-span {
     font-size: 14px;
     margin-top: 20px;
+}
+
+
+.headerStyle {
+/ / textAlign: 'center';
+/ / color: '#fff';
+    height: 64px;
+    padding-inline: 48px;
+    line-height: 64px;
+    background-color: #fff;
+    text-align: right
+}
+
+.contentStyle {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+/ / minHeight: 120;
+/ / lineHeight: '120px';
+/ / color: #fff;
+    background-color: #fff;
+}
+.content-div{
+    border-radius: 8px;
+}
+.siderStyle {
+    text-align: center;
+    line-height: 120px;
+    color: #fff;
+    background-color: #1677ff;
+}
+
+.footerStyle {
+    text-align: center;
+    color: #fff;
+    background-color: #fff;
+}
+
+.layoutStyle {
+    border-radius: 8px;
+/ / overflow: 'hidden';
+/ / width: 'calc(50% - 8px)';
+/ / maxWidth: 'calc(50% - 8px)';
 }

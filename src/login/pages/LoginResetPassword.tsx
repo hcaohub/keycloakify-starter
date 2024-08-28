@@ -44,7 +44,7 @@ export default function LoginResetPassword(props: PageProps<Extract<KcContext, {
             displayMessage={true}
         >
 
-            <div style={{width: '50%'}}>
+            <div className={"content-div"}>
                 {
                     (message !== undefined && (message.type !== "warning" || !isAppInitiatedAction)) &&
                     <Alert message={message.summary} type={message.type} showIcon/>
@@ -120,14 +120,8 @@ export default function LoginResetPassword(props: PageProps<Extract<KcContext, {
                             {CommonService.captchaFormItem(msgStr,(phoneNumber)=>{return CommonService.sendVerificationCode(phoneNumber,window.location.origin + '/realms/' + realm.name + '/sms/reset-code')},true)}
                         </>
                     )}
-                    <div>
-                        {realm.resetPasswordAllowed && (
-                            <a style={{float: 'right',marginBottom: 24}}
-                               href={url.loginResetCredentialsUrl}>{msg("doForgotPassword")}</a>
-                        )}
-                    </div>
 
-                    <Form.Item wrapperCol={{offset: 4, span: 16}}>
+                    <Form.Item>
                         <Button type="primary" htmlType="submit" block>
                             {msg("doSubmit")}
                         </Button>

@@ -147,8 +147,8 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
             {/*    </div>*/}
             {/*</div>*/}
 
-                    <Layout style={layoutStyle}>
-                        <Header style={headerStyle}>
+                    <Layout className={"layoutStyle"}>
+                        <Header className={"headerStyle"}>
                             {realm.internationalizationEnabled && (assert(locale !== undefined), locale.supported.length > 1) && (
                                 <Select
                                     variant="borderless"
@@ -161,10 +161,10 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                                 />
                             )}
                         </Header>
-                        <Content style={contentStyle}>
+                        <Content className={"contentStyle"}>
                             {children}
                         </Content>
-                        <Footer style={footerStyle}></Footer>
+                        <Footer className={"footerStyle"}></Footer>
                     </Layout>
 
             </ConfigProvider>
