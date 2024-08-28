@@ -1,3 +1,6 @@
+import {ProFormCaptcha,} from '@ant-design/pro-components';
+import {LockOutlined} from "@ant-design/icons";
+
 export const providerIconParse: { [k: string]: string } = {
     github: "github",
     gitee: "gitee",
@@ -76,5 +79,34 @@ export default {
         document.body.appendChild(hiddenForm);
         hiddenForm.submit();
     },
+
+    captchaFormItem(msgStr:any,onGetCaptcha:any,showLabel:boolean){
+        return <ProFormCaptcha
+            label={showLabel?msgStr("verificationCode"):""}
+            fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined/>,
+            }}
+            captchaProps={{
+                size: 'large',
+            }}
+            placeholder={msgStr("verificationCode")}
+            captchaTextRender={(timing, count) => {
+                if (timing) {
+                    return `${count}s`;
+                }
+                return msgStr("sendVerificationCode");
+            }}
+            phoneName={"phoneNumber"}
+            name="code"
+            rules={[
+                {
+                    required: true,
+                    message: msgStr("verificationCodeDoesNotMatch"),
+                },
+            ]}
+            onGetCaptcha={onGetCaptcha}
+        />
+    }
 
 }

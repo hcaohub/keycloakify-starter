@@ -5,9 +5,9 @@ import type {KcContext} from "../KcContext";
 import type {I18n} from "../i18n";
 import axios from "axios";
 
-import {Alert, Button, Divider, Form, Space, Tabs, Tooltip} from 'antd';
+import {Alert, Button, Divider, Form, message as antMsg, Space, Tabs, Tooltip} from 'antd';
 import {createFromIconfontCN, LockOutlined, MobileOutlined, UserOutlined} from '@ant-design/icons';
-import {LoginFormPage, ProFormCaptcha, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
+import {LoginFormPage, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
 import CommonService, {providerIconParse} from "../CommonService";
 
 const IconFont = createFromIconfontCN({
@@ -37,8 +37,11 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
     const onGetCaptcha = async (phoneNumber: string) => {
         const params = {params: {phoneNumber}}
-        let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/authentication-code', params);
-        console.log("###", res);
+        let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/authentication-code', params).catch((e)=>{
+            console.log("###", e);
+            antMsg.error(e?.response?.error||e.message)
+            return Promise.reject(new Error(e?.response?.error||e.message));
+        });
         if (res) {
             return;
         }
@@ -52,7 +55,6 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         CommonService.formSubmit(url.loginAction, values);
     }
     useEffect(() => {
-        console.log("existsError username password phoneNumber code", messagesPerField.existsError("username", "password", "phoneNumber", "code"));
     }, []);
 
     return (
@@ -216,31 +218,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         },
                                     ]}
                                 />
-                                <ProFormCaptcha
-                                    fieldProps={{
-                                        size: 'large',
-                                        prefix: <LockOutlined/>,
-                                    }}
-                                    captchaProps={{
-                                        size: 'large',
-                                    }}
-                                    placeholder={msgStr("verificationCode")}
-                                    captchaTextRender={(timing, count) => {
-                                        if (timing) {
-                                            return `${count}`;
-                                        }
-                                        return msg("sendVerificationCode");
-                                    }}
-                                    phoneName={"phoneNumber"}
-                                    name="code"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: msgStr("verificationCodeDoesNotMatch"),
-                                        },
-                                    ]}
-                                    onGetCaptcha={onGetCaptcha}
-                                />
+                                {CommonService.captchaFormItem(msgStr,onGetCaptcha,false)}
                             </>
                         )}
                         <div>

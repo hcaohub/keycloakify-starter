@@ -5,9 +5,11 @@ import type {KcContext} from "../KcContext";
 import type {I18n} from "../i18n";
 import axios from "axios";
 
-import {Alert, Button, Checkbox, Form, Input, List, Radio, Select} from 'antd';
+import {Alert, Button, Checkbox, Form, Input, List, Radio, Select,message as antMsg,} from 'antd';
 import CommonService from "../CommonService";
 import {useUserProfileForm} from "keycloakify/login/lib/useUserProfileForm";
+import {ProFormCaptcha,} from '@ant-design/pro-components';
+import {LockOutlined} from "@ant-design/icons";
 
 
 export default function Register(props: PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n>) {
@@ -24,7 +26,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
         supportPhone,
         message, isAppInitiatedAction,
         attemptedPhoneActivated,
-        profile
+        profile, verifyPhone
     } = kcContext;
 
     const {msg, msgStr, advancedMsg} = i18n;
@@ -40,14 +42,18 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
 
     const onGetCaptcha = async (phoneNumber: string) => {
         const params = {params: {phoneNumber}}
-        let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/authentication-code', params);
+        let res = await axios.get(window.location.origin + '/realms/' + realm.name + '/sms/registration-code', params).catch((e)=>{
+            console.log("###", e);
+            antMsg.error(e?.response?.error||e.message)
+            return Promise.reject(new Error(e?.response?.error||e.message));
+        });
         if (res) {
             return;
         }
         // throw new Error(e.response.data.error)
     }
     const onRegister = async (values: { [key: string]: any }) => {
-        console.log("#@#@##@",values)
+        console.log("#@#@##@", values)
         CommonService.formSubmit(url.registrationAction, values);
     }
 
@@ -114,6 +120,13 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                         message: msgStr("error-invalid-length-too-short", attribute?.validators?.length?.min.toString())
                     });
             }
+            if (attribute?.name==="phoneNumber") {
+                rules.push(
+                    {
+                        pattern: /^1\d{10}$/,
+                        message: msgStr("invalidPhoneNumber"),
+                    },);
+            }
             if (attribute?.validators?.length?.max > 0) {
                 rules.push({
                     max: parseInt(attribute?.validators?.length?.max),
@@ -152,7 +165,12 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                     return <Alert key={index} message={error.errorMessageStr} type={"error"} showIcon/>
                 })
             }
-            </>
+            {verifyPhone&&attribute.name === "phoneNumber" &&(
+                <List.Item key={-2}>
+                    {CommonService.captchaFormItem(msgStr,onGetCaptcha,true)}
+                </List.Item>
+            )}
+        </>
             ;
 
     }
@@ -264,6 +282,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                 }
                             })
                         }
+
                     </List>
 
 
