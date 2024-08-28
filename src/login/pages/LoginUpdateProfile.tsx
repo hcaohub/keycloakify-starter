@@ -3,7 +3,7 @@ import type {PageProps} from "keycloakify/login/pages/PageProps";
 import type {KcContext} from "../KcContext";
 import type {I18n} from "../i18n";
 
-import {Button, Form,} from 'antd';
+import {Alert, Button, Form,} from 'antd';
 import CommonService from "../CommonService";
 import {useState} from "react";
 
@@ -19,7 +19,7 @@ export default function LoginUpdateProfile(props: PageProps<Extract<KcContext, {
     } = props;
 
     const {
-        url,isAppInitiatedAction
+        url,isAppInitiatedAction,message
     } = kcContext;
 
     const {msg} = i18n;
@@ -52,6 +52,10 @@ export default function LoginUpdateProfile(props: PageProps<Extract<KcContext, {
             displayMessage={true}
         >
             <div className={"content-div"}>
+                {
+                    (message && (message.type !== "warning")) &&
+                    <Alert message={message.summary} type={message.type} showIcon/>
+                }
                 <Form
                     form={form}
                     name="basic"

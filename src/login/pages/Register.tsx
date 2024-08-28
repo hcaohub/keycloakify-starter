@@ -3,7 +3,7 @@ import type {PageProps} from "keycloakify/login/pages/PageProps";
 import type {KcContext} from "../KcContext";
 import type {I18n} from "../i18n";
 
-import {Button, Form,} from 'antd';
+import {Alert, Button, Form,} from 'antd';
 import CommonService from "../CommonService";
 
 
@@ -18,13 +18,14 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
     } = props;
 
     const {
-        url,
+        url,message
     } = kcContext;
 
     const {msg} = i18n;
 
 
     const onRegister = async (values: { [key: string]: any }) => {
+        console.log("@#@#@#------>",values)
         CommonService.formSubmit(url.registrationAction, values);
     }
 
@@ -42,6 +43,10 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
             displayMessage={true}
         >
             <div className={"content-div"}>
+                {
+                    (message && (message.type !== "warning")) &&
+                    <Alert message={message.summary} type={message.type} showIcon/>
+                }
                 <Form
                     form={form}
                     name="basic"

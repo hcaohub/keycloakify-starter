@@ -16,7 +16,7 @@ export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, 
     } = props;
 
     const {
-        url, messagesPerField, isAppInitiatedAction
+        url, messagesPerField, isAppInitiatedAction,message
     } = kcContext;
 
     const {msg, msgStr} = i18n;
@@ -36,6 +36,10 @@ export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, 
             headerNode={msg("updatePasswordTitle")}
         >
             <div className={"content-div"}>
+                {
+                    (message && (message.type !== "warning")) &&
+                    <Alert message={message.summary} type={message.type} showIcon/>
+                }
                 <Form
                     name="basic"
                     labelCol={{span: 10}}

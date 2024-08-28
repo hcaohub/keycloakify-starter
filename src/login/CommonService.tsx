@@ -2,6 +2,7 @@ import {ProFormCaptcha,} from '@ant-design/pro-components';
 import {LockOutlined} from "@ant-design/icons";
 import {message} from 'antd';
 import axios from "axios";
+
 export const providerIconParse: { [k: string]: string } = {
     github: "github",
     gitee: "gitee",
@@ -10,10 +11,9 @@ export const providerIconParse: { [k: string]: string } = {
 }
 
 
-
 export default {
-    async formSubmit(url:string,values:{[key:string]:any}) {
-        console.log("form submit", url,values)
+    async formSubmit(url: string, values: { [key: string]: any }) {
+        console.log("form submit", url, values)
         // 创建一个隐藏的表单并提交
         const hiddenForm = document.createElement('form');
         hiddenForm.method = 'POST';
@@ -22,15 +22,21 @@ export default {
 
         // 将表单数据添加到隐藏表单中
         Object.keys(values).forEach(key => {
-            if(values[key] instanceof Array){
-                values[key].map((val:any)=>{
+            if (values[key] instanceof Array) {
+                if (values[key].length <= 0) {
+                    return;
+                }
+                values[key].map((val: any) => {
                     const input = document.createElement('input');
                     input.type = 'hidden';
                     input.name = key;
                     input.value = val;
                     hiddenForm.appendChild(input);
                 })
-            }else{
+            } else {
+                if (!values[key] || values[key] == "" || values[key] == "undefined") {
+                    return;
+                }
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = key;
@@ -43,9 +49,9 @@ export default {
         hiddenForm.submit();
     },
 
-    captchaFormItem(msgStr:any,onGetCaptcha:any,showLabel:boolean){
+    captchaFormItem(msgStr: any, onGetCaptcha: any, showLabel: boolean) {
         return <ProFormCaptcha
-            label={showLabel?msgStr("verificationCode"):""}
+            label={showLabel ? msgStr("verificationCode") : ""}
             fieldProps={{
                 size: 'large',
                 prefix: <LockOutlined/>,
@@ -71,12 +77,12 @@ export default {
             onGetCaptcha={onGetCaptcha}
         />
     },
-    async sendVerificationCode(phoneNumber: string,url:string){
+    async sendVerificationCode(phoneNumber: string, url: string) {
         const params = {params: {phoneNumber}}
-        let res = await axios.get(url, params).catch((e)=>{
+        let res = await axios.get(url, params).catch((e) => {
             console.log("###", e);
-            message.error(e?.response?.data?.error||e.message)
-            return Promise.reject(new Error(e?.response?.data?.error||e.message));
+            message.error(e?.response?.data?.error || e.message)
+            return Promise.reject(new Error(e?.response?.data?.error || e.message));
         });
         if (res) {
             return;
