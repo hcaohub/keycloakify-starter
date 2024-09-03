@@ -68,7 +68,7 @@ keycloak admin->realm->Realm setting->Localization->Effective message bundle输�
 ==== 解决方案
 ===== 方案一：定义一个新的主题
 
-.theme.properties
+.theme/hc-react2/login/theme.properties
 [source,javascript,tabsize=2]
 ----
 parent=hc-react //继承当前主题
